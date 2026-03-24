@@ -3,10 +3,3 @@
     { "source": "/", "destination": "/public/quickscope.html" }
   ]
 }
-```
-
-Save and close Notepad, then run:
-```
-git add vercel.json
-git commit -m "Fix vercel.json routing"
-git push
