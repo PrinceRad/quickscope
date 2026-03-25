@@ -6,6 +6,14 @@ const { createClient } = require('@supabase/supabase-js');
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.get('/', (req, res) => res.sendFile(__dirname + '/public/quickscope.html'));
+```
+
+Save and close, then run:
+```
+git add server.js
+git commit -m "Add root route to serve quickscope.html"
+git push
 app.use(express.static('public'));
 
 const supabase = createClient(
