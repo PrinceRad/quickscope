@@ -1215,5 +1215,18 @@ function exportCSV() {
 }
 
 </script>
+<script>
+  // Trigger PDF download if redirected from PayPal
+  window.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('paid') === 'true') {
+      if (typeof downloadPDF === 'function') {
+        downloadPDF();
+      } else {
+        console.warn('downloadPDF function not found');
+      }
+    }
+  });
+</script>
 </body>
 </html>
