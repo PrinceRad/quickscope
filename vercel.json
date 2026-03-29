@@ -1,5 +1,17 @@
 {
-  "rewrites": [
-    { "source": "/", "destination": "/public/quickscope.html" }
+  "version": 2,
+  "builds": [
+    { "src": "public/quickscope.html", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/", "dest": "/public/quickscope.html" },
+    { "src": "/(.*)", "dest": "/public/$1" }
   ]
 }
+```
+
+Save and close, then run:
+```
+git add .
+git commit -m "Switch to PayPal, fix Vercel routing"
+git push

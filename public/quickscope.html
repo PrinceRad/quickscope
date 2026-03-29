@@ -741,7 +741,7 @@ function validateAndPay() {
     return;
   }
   localStorage.setItem('qs_pending_download', JSON.stringify(getData()));
-  window.open('https://quickscope.lemonsqueezy.com/checkout/buy/18f70635-a23e-4129-b093-4ba7b467e408', '_blank');
+  window.open('https://www.paypal.com/ncp/payment/9ACCD7USDTAGW', '_blank');
 }
 
 function validateAndShowModal() {
@@ -1040,7 +1040,13 @@ document.getElementById('deadline').min = new Date().toISOString().split('T')[0]
 })();
 
 // AUTH
-const API = 'http://localhost:3000';
+const API = (() => {
+  const origin = window.location.origin;
+  if (origin && origin !== 'null') {
+    return origin;
+  }
+  return 'http://localhost:3000';
+})();
 let authMode = 'login';
 let currentUser = null;
 let currentToken = null;
