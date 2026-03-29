@@ -557,10 +557,27 @@ footer a:hover{color:rgba(255,255,255,0.7)}
           <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Download clean PDF — $4
         </button>
-        <button class="dl-btn-pro" onclick="showProModal()">
-          ★ Go Pro — unlimited downloads for $9/month
-        </button>
-        <div class="dl-free-note">Free = watermarked · $4 = clean · $9/mo = unlimited clean</div>
+        <div id="paypal-button-container-P-7EC30041BD813483SNHEYCNQ"></div>
+        <script src="https://www.paypal.com/sdk/js?client-id=ASGlqEBeCVegb7Fg93nm39-QYb42qzW4nNWHJ34FYkxQjSd53a4a-pzEWQmNdD3viXCxS9BuvLLCeHRb&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
+        <script>
+          paypal.Buttons({
+              style: {
+                  shape: 'pill',
+                  color: 'gold',
+                  layout: 'vertical',
+                  label: 'subscribe'
+              },
+              createSubscription: function(data, actions) {
+                return actions.subscription.create({
+                  plan_id: 'P-7EC30041BD813483SNHEYCNQ'
+                });
+              },
+              onApprove: function(data, actions) {
+                window.location.href = "https://quickscopestudio.vercel.app?paid_pro=true";
+              }
+          }).render('#paypal-button-container-P-7EC30041BD813483SNHEYCNQ');
+        </script>
+        <div class="dl-free-note">Free = watermarked · $4 = clean · Pro subscription unlocks unlimited clean PDFs</div>
       </div>
     </div>
   </div>
@@ -635,6 +652,7 @@ footer a:hover{color:rgba(255,255,255,0.7)}
 <script>
 const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 let selectedOption = 'single';
+let proModeActive = false;
 
 const observer = new IntersectionObserver(entries => {
   entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
@@ -776,6 +794,21 @@ function handlePayment() {
 function handleProPayment() {
   closeModals();
   window.open('https://quickscope.lemonsqueezy.com/checkout/buy/59430927-f88c-4e69-abdb-f4138702491f?discount=0', '_blank');
+}
+
+function enableProFeatures() {
+  if (proModeActive) return;
+  proModeActive = true;
+  window.qsProAccess = true;
+  localStorage.setItem('qs_pro_access', 'true');
+  document.body?.classList.add('qs-pro-active');
+  const note = document.querySelector('.dl-free-note');
+  if (note) note.textContent = 'Pro unlocked · unlimited clean PDFs';
+  const payLabel = document.getElementById('pay-btn-label');
+  if (payLabel) payLabel.textContent = 'Pro unlocked — unlimited downloads';
+  const optPro = document.getElementById('opt-pro-upsell');
+  if (optPro) optPro.classList.add('selected');
+  selectedOption = 'pro';
 }
 
 // PDF GENERATION
@@ -1225,6 +1258,9 @@ function exportCSV() {
       } else {
         console.warn('downloadPDF function not found');
       }
+    }
+    if (urlParams.get('paid_pro') === 'true') {
+      enableProFeatures();
     }
   });
 </script>
