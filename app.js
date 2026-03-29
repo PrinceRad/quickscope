@@ -618,6 +618,35 @@ async function loadDocuments() {
   }
 }
 
+// --- PRO MODE ---
+function enableProFeatures() {
+  localStorage.setItem("quickscope_pro", "true");
+
+  // Example: remove watermark
+  const watermark = document.querySelector('.watermark');
+  if (watermark) watermark.style.display = 'none';
+
+  // Example: change button text
+  const proBtn = document.querySelector('.dl-btn-pro');
+  if (proBtn) {
+    proBtn.innerText = "Pro Active ✓ Unlimited Downloads";
+    proBtn.disabled = true;
+  }
+}
+
+// Detect return from PayPal
+window.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.get('paid_pro') === 'true') {
+    enableProFeatures();
+  }
+
+  // Keep Pro active on reload
+  if (localStorage.getItem("quickscope_pro") === "true") {
+    enableProFeatures();
+  }
+});
 async function deleteDocument(id) {
   await fetch(API + '/documents/' + id, {
     method: 'DELETE',
