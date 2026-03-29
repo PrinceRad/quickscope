@@ -10,245 +10,8 @@
 <meta property="og:description" content="Generate a professional scope of work document in under 2 minutes. Free to preview, $4 to download."/>
 <meta property="og:type" content="website"/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --ink:#141413;--ink2:#4a4845;--ink3:#9c9790;
-  --bg:#f7f4ef;--bg2:#f0ece3;--bg3:#e8e2d7;
-  --white:#ffffff;
-  --accent:#c8502a;
-  --green:#16a34a;--green-soft:#f0fdf4;
-  --border:#ddd8cf;--border2:#ccc6bc;
-  --gold:#b45309;--gold-soft:#fffbeb;
-  --serif:'DM Serif Display',serif;
-  --sans:'DM Sans',sans-serif;
-  --mono:'DM Mono',monospace;
-  --shadow:0 1px 3px rgba(0,0,0,0.04),0 8px 32px rgba(0,0,0,0.07);
-  --shadow-lg:0 2px 8px rgba(0,0,0,0.06),0 20px 60px rgba(0,0,0,0.1);
-}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
-.fade-up{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease}
-.fade-up.visible{opacity:1;transform:translateY(0)}
-
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;height:60px;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;background:rgba(247,244,239,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
-.nav-logo{font-family:var(--serif);font-size:1.3rem;color:var(--ink);letter-spacing:-0.01em}
-.nav-logo span{color:var(--accent)}
-.nav-right{display:flex;align-items:center;gap:1rem}
-.nav-users{font-family:var(--mono);font-size:0.62rem;color:var(--ink3);letter-spacing:0.04em}
-.nav-users strong{color:var(--green);font-weight:500}
-.nav-cta{background:var(--ink);color:var(--white);border:none;padding:7px 18px;border-radius:6px;font-family:var(--sans);font-size:0.8rem;font-weight:500;cursor:pointer;transition:opacity 0.15s;text-decoration:none;}
-.nav-cta:hover{opacity:0.85}
-.nav-auth-btn{background:transparent;color:var(--ink);border:1.5px solid var(--border2);padding:6px 16px;border-radius:6px;font-family:var(--sans);font-size:0.8rem;font-weight:500;cursor:pointer;transition:all 0.15s;}
-.nav-auth-btn:hover{background:var(--ink);color:var(--white);border-color:var(--ink)}
-.nav-auth-btn.logged-in{color:var(--green);border-color:#bbf7d0;background:var(--green-soft);}
-
-/* HERO */
-.hero{padding:100px 2.5rem 0;max-width:1200px;margin:0 auto;}
-.hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;padding-bottom:5rem;border-bottom:1px solid var(--border);}
-.hero-tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:0.63rem;letter-spacing:0.08em;color:var(--green);background:var(--green-soft);border:1px solid #bbf7d0;border-radius:100px;padding:4px 12px;margin-bottom:1.5rem;}
-.hero-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
-.hero h1{font-family:var(--serif);font-size:clamp(2.8rem,4.5vw,4rem);line-height:1.06;letter-spacing:-0.02em;color:var(--ink);margin-bottom:1.25rem;}
-.hero h1 em{font-style:italic;color:var(--accent)}
-.hero-sub{font-size:1.05rem;color:var(--ink2);line-height:1.75;max-width:440px;margin-bottom:2rem;}
-.hero-actions{display:flex;align-items:center;gap:1rem;margin-bottom:2.5rem}
-.btn-primary{background:var(--ink);color:var(--white);border:none;padding:13px 28px;border-radius:8px;font-family:var(--sans);font-size:0.9rem;font-weight:500;cursor:pointer;transition:opacity 0.15s;text-decoration:none;display:inline-block;}
-.btn-primary:hover{opacity:0.87}
-.btn-ghost{font-size:0.85rem;color:var(--ink2);cursor:pointer;display:flex;align-items:center;gap:4px;background:none;border:none;text-decoration:none;}
-.btn-ghost:hover{color:var(--ink)}
-.hero-trust{display:flex;align-items:center;gap:1.5rem}
-.trust-faces{display:flex}
-.trust-face{width:32px;height:32px;border-radius:50%;border:2px solid var(--bg);overflow:hidden;margin-left:-8px;}
-.trust-face:first-child{margin-left:0}
-.trust-face img{width:100%;height:100%;object-fit:cover}
-.trust-text{font-size:0.82rem;color:var(--ink2);line-height:1.4}
-.trust-text strong{color:var(--ink);font-weight:500}
-.trust-stars{color:#f59e0b;font-size:0.75rem;letter-spacing:1px}
-.hero-visual{position:relative}
-.hero-img-wrap{border-radius:16px;overflow:hidden;aspect-ratio:4/3;background:var(--bg3);box-shadow:var(--shadow-lg);}
-.hero-img-wrap img{width:100%;height:100%;object-fit:cover}
-.hero-float-card{position:absolute;bottom:-20px;left:-24px;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:0.75rem;min-width:220px;}
-.hfc-icon{width:36px;height:36px;border-radius:8px;background:var(--green-soft);border:1px solid #bbf7d0;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
-.hfc-title{font-size:0.82rem;font-weight:500;color:var(--ink)}
-.hfc-sub{font-family:var(--mono);font-size:0.6rem;color:var(--ink3);margin-top:1px}
-.hero-float-card2{position:absolute;top:-16px;right:-20px;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:0.85rem 1rem;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:0.6rem;}
-.hfc2-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0}
-.hfc2-text{font-family:var(--mono);font-size:0.62rem;color:var(--ink2)}
-
-/* PROOF BAR */
-.proof-bar{max-width:1200px;margin:0 auto;padding:2.5rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;border-bottom:1px solid var(--border);flex-wrap:wrap;}
-.proof-stat{text-align:center}
-.proof-num{font-family:var(--serif);font-size:2rem;color:var(--ink);display:block}
-.proof-label{font-family:var(--mono);font-size:0.6rem;color:var(--ink3);letter-spacing:0.08em;text-transform:uppercase;margin-top:2px}
-.proof-divider{width:1px;height:40px;background:var(--border);flex-shrink:0}
-
-/* SECTIONS */
-.section{max-width:1200px;margin:0 auto;padding:5rem 2.5rem}
-.section-eyebrow{font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;color:var(--accent);text-transform:uppercase;margin-bottom:0.6rem;}
-.section-title{font-family:var(--serif);font-size:clamp(1.8rem,3vw,2.5rem);color:var(--ink);letter-spacing:-0.01em;margin-bottom:0.6rem;}
-.section-sub{font-size:1rem;color:var(--ink2);line-height:1.7;max-width:480px}
-
-/* STEPS */
-.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem;}
-.step-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1.75rem;transition:box-shadow 0.2s;}
-.step-card:hover{box-shadow:var(--shadow)}
-.step-num{width:36px;height:36px;border-radius:8px;background:var(--bg2);border:1px solid var(--border);font-family:var(--mono);font-size:0.75rem;font-weight:500;color:var(--ink2);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;}
-.step-title{font-size:1rem;font-weight:500;color:var(--ink);margin-bottom:0.5rem}
-.step-desc{font-size:0.85rem;color:var(--ink2);line-height:1.65}
-
-/* ====== PRICING SECTION ====== */
-.pricing-section{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:5rem 0;}
-.pricing-inner{max-width:1200px;margin:0 auto;padding:0 2.5rem;}
-.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:3rem;}
-.pricing-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:2rem;position:relative;transition:box-shadow 0.2s;}
-.pricing-card:hover{box-shadow:var(--shadow)}
-.pricing-card.featured{border:2px solid var(--ink);box-shadow:var(--shadow-lg);}
-.pricing-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--white);font-family:var(--mono);font-size:0.6rem;letter-spacing:0.08em;padding:4px 14px;border-radius:100px;white-space:nowrap;}
-.pricing-tier{font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:0.75rem;}
-.pricing-price{font-family:var(--serif);font-size:2.75rem;color:var(--ink);line-height:1;margin-bottom:0.3rem;}
-.pricing-price sup{font-size:1.2rem;vertical-align:super}
-.pricing-price-note{font-family:var(--mono);font-size:0.65rem;color:var(--ink3);letter-spacing:0.04em;margin-bottom:1.25rem;}
-.pricing-desc{font-size:0.85rem;color:var(--ink2);line-height:1.6;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);}
-.pricing-features{list-style:none;display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1.75rem;}
-.pricing-features li{font-size:0.83rem;color:var(--ink2);display:flex;align-items:flex-start;gap:0.6rem;line-height:1.4;}
-.pricing-features li .tick{color:var(--green);font-weight:600;flex-shrink:0;margin-top:1px}
-.pricing-features li .cross{color:var(--ink3);flex-shrink:0;margin-top:1px}
-.pricing-btn{width:100%;padding:0.85rem;border-radius:8px;font-family:var(--sans);font-size:0.88rem;font-weight:500;cursor:pointer;transition:all 0.15s;}
-.pricing-btn.outline{background:transparent;color:var(--ink);border:1.5px solid var(--border2);}
-.pricing-btn.outline:hover{background:var(--ink);color:var(--white);border-color:var(--ink)}
-.pricing-btn.solid{background:var(--ink);color:var(--white);border:none;}
-.pricing-btn.solid:hover{opacity:0.87}
-
-/* WORKSPACE */
-.workspace-section{background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:5rem 0;}
-.workspace-inner{max-width:1200px;margin:0 auto;padding:0 2.5rem;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;}
-.workspace-imgs{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:1rem;}
-.ws-img{border-radius:12px;overflow:hidden;background:var(--bg3)}
-.ws-img img{width:100%;height:100%;object-fit:cover;display:block}
-.ws-img-tall{grid-row:1/3;aspect-ratio:2/3}
-.ws-img-sq{aspect-ratio:1}
-.workspace-quote{font-family:var(--serif);font-size:1.4rem;font-style:italic;color:var(--ink);line-height:1.4;margin-bottom:1.5rem;padding-left:1.25rem;border-left:3px solid var(--accent);}
-
-/* TESTIMONIALS */
-.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:3rem;}
-.testi-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1.5rem;}
-.testi-stars{color:#f59e0b;font-size:0.8rem;letter-spacing:2px;margin-bottom:0.85rem}
-.testi-text{font-size:0.88rem;color:var(--ink2);line-height:1.7;margin-bottom:1.25rem}
-.testi-author{display:flex;align-items:center;gap:0.75rem}
-.testi-avatar{width:38px;height:38px;border-radius:50%;overflow:hidden;background:var(--bg3);flex-shrink:0;}
-.testi-avatar img{width:100%;height:100%;object-fit:cover}
-.testi-name{font-size:0.85rem;font-weight:500;color:var(--ink)}
-.testi-role{font-family:var(--mono);font-size:0.6rem;color:var(--ink3);letter-spacing:0.04em;margin-top:1px}
-
-/* TOOL SECTION */
-.tool-section{background:var(--white);border-top:1px solid var(--border);}
-.tool-header{max-width:1200px;margin:0 auto;padding:4rem 2.5rem 3rem;text-align:center;}
-.tool-body{max-width:1200px;margin:0 auto;padding:0 2.5rem 6rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;}
-
-/* FORM */
-.form-stack{display:flex;flex-direction:column;gap:1rem}
-.form-block{background:var(--bg);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
-.form-block-header{padding:0.9rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.65rem;background:var(--bg2);}
-.fb-num{width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--white);font-family:var(--mono);font-size:0.6rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.fb-title{font-size:0.85rem;font-weight:500;color:var(--ink)}
-.form-block-body{padding:1.25rem;display:flex;flex-direction:column;gap:0.85rem}
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem}
-.field{display:flex;flex-direction:column;gap:0.3rem}
-label{font-family:var(--mono);font-size:0.58rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink3);display:flex;align-items:center;gap:3px}
-.req{color:var(--accent);font-size:0.65rem}
-input,select,textarea{background:var(--white);border:1px solid var(--border);border-radius:7px;padding:0.6rem 0.8rem;font-family:var(--sans);font-size:0.87rem;color:var(--ink);outline:none;width:100%;transition:border-color 0.15s,box-shadow 0.15s;}
-input:focus,select:focus,textarea:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(20,20,19,0.06);}
-input.error,select.error,textarea.error{border-color:var(--accent);box-shadow:0 0 0 3px rgba(200,80,42,0.08);}
-.field-error{font-family:var(--mono);font-size:0.58rem;color:var(--accent);display:none;margin-top:1px}
-.field-error.show{display:block}
-textarea{resize:vertical;min-height:76px;line-height:1.55}
-select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239c9790' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.8rem center;padding-right:2.2rem;}
-
-/* PREVIEW */
-.preview-sticky{position:sticky;top:80px}
-.preview-label{font-family:var(--mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:0.85rem;display:flex;align-items:center;gap:0.6rem;}
-.preview-label::after{content:'';flex:1;height:1px;background:var(--border)}
-.preview-doc{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.75rem;position:relative;overflow:hidden;box-shadow:var(--shadow);}
-.watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);font-family:var(--serif);font-size:2.8rem;color:rgba(200,80,42,0.07);white-space:nowrap;pointer-events:none;user-select:none;letter-spacing:0.08em;line-height:1.4;text-align:center;}
-.doc-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:1.5px solid var(--ink);}
-.doc-brand{font-family:var(--serif);font-size:1rem;color:var(--ink)}
-.doc-brand span{color:var(--accent)}
-.doc-ref{font-family:var(--mono);font-size:0.58rem;color:var(--ink3);letter-spacing:0.05em}
-.doc-title{font-family:var(--serif);font-size:1.3rem;color:var(--ink);margin-bottom:2px}
-.doc-subtitle{font-family:var(--mono);font-size:0.58rem;color:var(--ink3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:1.1rem}
-.doc-parties{display:grid;grid-template-columns:1fr 1fr;gap:0.65rem;margin-bottom:1rem}
-.doc-party{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:0.65rem 0.8rem}
-.doc-role{font-family:var(--mono);font-size:0.55rem;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:2px}
-.doc-name{font-size:0.82rem;font-weight:500;color:var(--ink)}
-.doc-email{font-family:var(--mono);font-size:0.6rem;color:var(--ink3);margin-top:1px}
-.doc-row{margin-bottom:0.8rem}
-.doc-lbl{font-family:var(--mono);font-size:0.55rem;color:var(--ink3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:2px}
-.doc-val{font-size:0.82rem;color:var(--ink);line-height:1.5}
-.doc-3col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.6rem;margin-bottom:0.8rem}
-.doc-total{background:var(--ink);color:var(--white);border-radius:7px;padding:0.75rem 1rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:1.1rem;}
-.doc-total-lbl{font-family:var(--mono);font-size:0.58rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.55}
-.doc-total-val{font-family:var(--serif);font-size:1.2rem}
-.doc-sigs{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;padding-top:1rem;border-top:1px solid var(--border);}
-.sig-line{height:1px;background:var(--border2);margin-bottom:3px}
-.sig-lbl{font-family:var(--mono);font-size:0.57rem;color:var(--ink3);letter-spacing:0.04em}
-
-/* DOWNLOAD BUTTONS */
-.dl-btns{margin-top:0.75rem;display:flex;flex-direction:column;gap:0.6rem;}
-.dl-btn-free{width:100%;padding:0.8rem;background:transparent;color:var(--ink3);border:1.5px dashed var(--border2);border-radius:8px;font-family:var(--sans);font-size:0.85rem;font-weight:400;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:7px;}
-.dl-btn-free:hover{border-color:var(--ink3);color:var(--ink)}
-.dl-btn-single{width:100%;padding:0.8rem;background:transparent;color:var(--ink);border:1.5px solid var(--border2);border-radius:8px;font-family:var(--sans);font-size:0.85rem;font-weight:500;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:7px;}
-.dl-btn-single:hover{background:var(--ink);color:var(--white);border-color:var(--ink)}
-.dl-btn-pro{width:100%;padding:0.8rem;background:var(--gold-soft);color:var(--gold);border:1.5px solid #fcd34d;border-radius:8px;font-family:var(--sans);font-size:0.85rem;font-weight:500;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:7px;}
-.dl-btn-pro:hover{background:#fef3c7;border-color:var(--gold)}
-.dl-free-note{font-family:var(--mono);font-size:0.6rem;color:var(--ink3);text-align:center;letter-spacing:0.03em;}
-
-/* MODAL */
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);backdrop-filter:blur(6px);z-index:300;align-items:center;justify-content:center;padding:1rem;}
-.overlay.open{display:flex}
-.modal{background:var(--white);border-radius:18px;padding:2.25rem;max-width:420px;width:100%;position:relative;box-shadow:0 30px 100px rgba(0,0,0,0.18);animation:popIn 0.22s cubic-bezier(0.34,1.56,0.64,1);}
-@keyframes popIn{from{opacity:0;transform:scale(0.92)}to{opacity:1;transform:scale(1)}}
-.modal-x{position:absolute;top:1rem;right:1rem;width:28px;height:28px;border-radius:50%;background:var(--bg2);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.72rem;color:var(--ink2);transition:background 0.12s;}
-.modal-x:hover{background:var(--bg3)}
-.modal h2{font-family:var(--serif);font-size:1.75rem;letter-spacing:-0.01em;margin-bottom:0.4rem}
-.modal-desc{font-size:0.85rem;color:var(--ink2);line-height:1.65;margin-bottom:1.4rem}
-.modal-options{display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.5rem;}
-.modal-option{border:1.5px solid var(--border);border-radius:10px;padding:1rem 1.25rem;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
-.modal-option:hover{border-color:var(--ink)}
-.modal-option.selected{border-color:var(--ink);background:var(--bg2);}
-.modal-option-left{}
-.modal-option-title{font-size:0.9rem;font-weight:500;color:var(--ink);margin-bottom:2px}
-.modal-option-desc{font-size:0.75rem;color:var(--ink3);line-height:1.4}
-.modal-option-price{font-family:var(--serif);font-size:1.3rem;color:var(--ink);white-space:nowrap;}
-.modal-option-price small{font-family:var(--mono);font-size:0.6rem;color:var(--ink3);display:block;text-align:right}
-.modal-option.pro-option{border-color:#fcd34d;background:var(--gold-soft);}
-.modal-option.pro-option .modal-option-title{color:var(--gold)}
-.modal-option.pro-option .modal-option-price{color:var(--gold)}
-.pay-btn{width:100%;padding:0.9rem;background:var(--ink);color:var(--white);border:none;border-radius:8px;font-family:var(--sans);font-size:0.9rem;font-weight:500;cursor:pointer;transition:opacity 0.15s;}
-.pay-btn:hover{opacity:0.85}
-.modal-guarantee{font-family:var(--mono);font-size:0.6rem;color:var(--ink3);text-align:center;margin-top:0.75rem;letter-spacing:0.03em;}
-
-/* FOOTER */
-footer{background:var(--ink);color:rgba(255,255,255,0.5);padding:2.5rem;text-align:center;font-family:var(--mono);font-size:0.62rem;letter-spacing:0.05em;}
-footer strong{color:rgba(255,255,255,0.8)}
-footer a{color:rgba(255,255,255,0.4);text-decoration:none}
-footer a:hover{color:rgba(255,255,255,0.7)}
-
-@media(max-width:900px){
-  .hero-inner,.workspace-inner,.tool-body{grid-template-columns:1fr}
-  .hero-visual,.ws-img-tall{display:none}
-  .steps-grid,.testi-grid,.pricing-grid{grid-template-columns:1fr}
-  .proof-bar{justify-content:center}
-  .proof-divider{display:none}
-  nav{padding:0 1.25rem}
-  .hero,.section,.tool-header,.tool-body{padding-left:1.25rem;padding-right:1.25rem}
-  .pricing-inner{padding:0 1.25rem}
-  .workspace-inner{padding:0 1.25rem}
-  .preview-sticky{position:relative;top:auto}
-  .field-row{grid-template-columns:1fr}
-}
-</style>
 </head>
 <body>
 
@@ -377,7 +140,6 @@ footer a:hover{color:rgba(255,255,255,0.7)}
       <div class="section-title">Pay for what you need.<br/>Nothing more.</div>
     </div>
     <div class="pricing-grid">
-
       <!-- FREE -->
       <div class="pricing-card">
         <div class="pricing-tier">Free</div>
@@ -394,7 +156,6 @@ footer a:hover{color:rgba(255,255,255,0.7)}
         </ul>
         <a href="#tool" class="pricing-btn outline">Start for free</a>
       </div>
-
       <!-- PAY PER DOWNLOAD -->
       <div class="pricing-card featured">
         <div class="pricing-badge">Most popular</div>
@@ -412,7 +173,6 @@ footer a:hover{color:rgba(255,255,255,0.7)}
         </ul>
         <a href="#tool" class="pricing-btn solid">Get started</a>
       </div>
-
       <!-- PRO -->
       <div class="pricing-card">
         <div class="pricing-tier">Pro</div>
@@ -427,9 +187,8 @@ footer a:hover{color:rgba(255,255,255,0.7)}
           <li><span class="tick">✓</span> Duplicate & edit past scopes</li>
           <li><span class="tick">✓</span> Priority support</li>
         </ul>
-        <button class="pricing-btn outline" onclick="showProModal()">Go Pro — $9/month</button>
+        <button class="pricing-btn outline" onclick="showProModal()">Go Pro — $9/mo</button>
       </div>
-
     </div>
   </div>
 </div>
@@ -517,7 +276,6 @@ footer a:hover{color:rgba(255,255,255,0.7)}
           <div class="field"><label>Payment terms <span class="req">*</span></label><select id="payment-terms" onchange="liveUpdate()"><option value="">Select...</option><option>100% upfront before work begins</option><option>50% upfront, 50% on delivery</option><option>30% upfront, 70% on delivery</option><option>100% on delivery</option><option>Monthly retainer</option></select><span class="field-error" id="err-payment-terms">Required</span></div>
         </div>
       </div>
-
       <div style="font-family:var(--mono);font-size:0.6rem;color:var(--ink3);text-align:center;letter-spacing:0.03em;padding:0.25rem 0">
         🔒 Secure · ⚡ Instant download · ↩ Money-back guarantee
       </div>
@@ -557,34 +315,16 @@ footer a:hover{color:rgba(255,255,255,0.7)}
           <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Download clean PDF — $4
         </button>
+        <!-- PayPal Pro Subscription Button -->
         <div id="paypal-button-container-P-7EC30041BD813483SNHEYCNQ"></div>
-        <script src="https://www.paypal.com/sdk/js?client-id=ASGlqEBeCVegb7Fg93nm39-QYb42qzW4nNWHJ34FYkxQjSd53a4a-pzEWQmNdD3viXCxS9BuvLLCeHRb&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
-        <script>
-          paypal.Buttons({
-              style: {
-                  shape: 'pill',
-                  color: 'gold',
-                  layout: 'vertical',
-                  label: 'subscribe'
-              },
-              createSubscription: function(data, actions) {
-                return actions.subscription.create({
-                  plan_id: 'P-7EC30041BD813483SNHEYCNQ'
-                });
-              },
-              onApprove: function(data, actions) {
-                window.location.href = "https://quickscopestudio.vercel.app?paid_pro=true";
-              }
-          }).render('#paypal-button-container-P-7EC30041BD813483SNHEYCNQ');
-        </script>
-        <div class="dl-free-note">Free = watermarked · $4 = clean · Pro subscription unlocks unlimited clean PDFs</div>
+        <div class="dl-free-note">Free = watermarked · $4 = clean · Pro = unlimited clean PDFs</div>
       </div>
     </div>
   </div>
 </div>
 
 <footer>
-  <strong>QuickScope</strong> · <a href="https://quickscope.vercel.app">quickscope.vercel.app</a> · Built for freelancers who mean business · © 2026
+  <strong>QuickScope</strong> · <a href="https://quickscopestudio.vercel.app">quickscopestudio.vercel.app</a> · Built for freelancers who mean business · © 2026
 </footer>
 
 <!-- MODAL: Single download -->
@@ -617,7 +357,7 @@ footer a:hover{color:rgba(255,255,255,0.7)}
       </div>
     </div>
     <button class="pay-btn" id="pay-btn-label" onclick="handlePayment()">Pay $4 & download →</button>
-    <div class="modal-guarantee">🔒 Lemon Squeezy · 30-day money-back guarantee</div>
+    <div class="modal-guarantee">🔒 PayPal · 30-day money-back guarantee</div>
   </div>
 </div>
 
@@ -645,624 +385,30 @@ footer a:hover{color:rgba(255,255,255,0.7)}
       <li style="font-size:0.83rem;color:var(--ink2);display:flex;align-items:center;gap:0.6rem"><span style="color:var(--green);font-weight:600">✓</span> Cancel any time</li>
     </ul>
     <button class="pay-btn" onclick="handleProPayment()">Start Pro — $9/month →</button>
-    <div class="modal-guarantee">🔒 Lemon Squeezy · Cancel any time · 30-day money-back</div>
+    <div class="modal-guarantee">🔒 PayPal · Cancel any time · 30-day money-back</div>
   </div>
 </div>
 
+<!-- PayPal SDK for Pro subscription button -->
+<script src="https://www.paypal.com/sdk/js?client-id=ASGlqEBeCVegb7Fg93nm39-QYb42qzW4nNWHJ34FYkxQjSd53a4a-pzEWQmNdD3viXCxS9BuvLLCeHRb&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
+
+<!-- Main app logic -->
+<script src="app.js"></script>
+
+<!-- Render PayPal Pro button after SDK loads -->
 <script>
-const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-let selectedOption = 'single';
-let proModeActive = false;
-
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-},{threshold:0.1});
-document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
-
-function validateEmail(input, errId) {
-  const v = input.value.trim();
-  const err = document.getElementById(errId);
-  if (v && !emailRx.test(v)) {
-    input.classList.add('error');
-    err.textContent = 'Enter a valid email address';
-    err.classList.add('show');
-    return false;
-  }
-  input.classList.remove('error');
-  err.classList.remove('show');
-  return true;
-}
-
-function getData() {
-  return {
-    yourName: document.getElementById('your-name').value.trim(),
-    yourEmail: document.getElementById('your-email').value.trim(),
-    yourBusiness: document.getElementById('your-business').value.trim(),
-    clientName: document.getElementById('client-name').value.trim(),
-    clientEmail: document.getElementById('client-email').value.trim(),
-    deliverables: document.getElementById('deliverables').value.trim(),
-    deadline: document.getElementById('deadline').value,
-    revisions: document.getElementById('revisions').value,
-    extraRevision: document.getElementById('extra-revision').value.trim(),
-    price: document.getElementById('price').value,
-    currency: document.getElementById('currency').value,
-    paymentTerms: document.getElementById('payment-terms').value,
-  };
-}
-
-function formatDeadline(dd) {
-  if (!dd) return '—';
-  const d = new Date(dd + 'T00:00:00');
-  return d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
-}
-
-function liveUpdate() {
-  const d = getData();
-  const dn = d.yourBusiness ? `${d.yourName} (${d.yourBusiness})` : d.yourName;
-  document.getElementById('p-your-name').textContent = dn || '—';
-  document.getElementById('p-your-email').textContent = d.yourEmail || '—';
-  document.getElementById('p-client-name').textContent = d.clientName || '—';
-  document.getElementById('p-client-email').textContent = d.clientEmail || '—';
-  document.getElementById('p-deliverables').textContent = d.deliverables || '—';
-  document.getElementById('p-revisions').textContent = d.revisions || '—';
-  document.getElementById('p-extra').textContent = d.extraRevision || 'N/A';
-  document.getElementById('p-terms').textContent = d.paymentTerms || '—';
-  document.getElementById('p-deadline').textContent = formatDeadline(d.deadline);
-  document.getElementById('p-total').textContent = d.price ? d.currency + parseFloat(d.price).toLocaleString() : '—';
-  document.getElementById('p-ref').textContent = 'REF: QS-' + Math.floor(100000 + Math.random()*900000);
-  if (d.yourName) document.getElementById('p-sig1').textContent = d.yourName + ' signature';
-  if (d.clientName) document.getElementById('p-sig2').textContent = d.clientName + ' signature';
-}
-
-function showErr(id, msg) {
-  const e = document.getElementById('err-'+id);
-  const i = document.getElementById(id);
-  if(e){e.textContent=msg;e.classList.add('show');}
-  if(i) i.classList.add('error');
-}
-function clearErr(id) {
-  const e = document.getElementById('err-'+id);
-  const i = document.getElementById(id);
-  if(e) e.classList.remove('show');
-  if(i) i.classList.remove('error');
-}
-
-function validateFields() {
-  let ok = true;
-  ['your-name','client-name','deliverables','deadline','revisions','price','payment-terms'].forEach(id => {
-    const el = document.getElementById(id);
-    if (!el||!el.value.trim()){showErr(id,'Required');ok=false;}
-    else clearErr(id);
-  });
-  const ye = document.getElementById('your-email');
-  const ce = document.getElementById('client-email');
-  if (!ye.value.trim()){showErr('your-email','Required');ok=false;}
-  else if (!emailRx.test(ye.value.trim())){showErr('your-email','Enter a valid email');ye.classList.add('error');ok=false;}
-  else clearErr('your-email');
-  if (!ce.value.trim()){showErr('client-email','Required');ok=false;}
-  else if (!emailRx.test(ce.value.trim())){showErr('client-email','Enter a valid email');ce.classList.add('error');ok=false;}
-  else clearErr('client-email');
-  return ok;
-}
-
-function validateAndDownloadFree() {
-  if (!validateFields()) {
-    document.querySelector('.form-stack').scrollIntoView({behavior:'smooth',block:'start'});
-    return;
-  }
-  downloadPDF(true);
-}
-
-function validateAndPay() {
-  if (!validateFields()) {
-    document.querySelector('.form-stack').scrollIntoView({behavior:'smooth',block:'start'});
-    return;
-  }
-  localStorage.setItem('qs_pending_download', JSON.stringify(getData()));
-  window.open('https://www.paypal.com/ncp/payment/9ACCD7USDTAGW', '_blank');
-}
-
-function validateAndShowModal() {
-  validateAndPay();
-}
-
-function showProModal() {
-  document.getElementById('overlay-pro').classList.add('open');
-}
-
-function closeModals() {
-  document.getElementById('overlay-single').classList.remove('open');
-  document.getElementById('overlay-pro').classList.remove('open');
-}
-
-function selectOption(opt) {
-  selectedOption = opt;
-  document.getElementById('opt-free').classList.toggle('selected', opt === 'free');
-  document.getElementById('opt-single').classList.toggle('selected', opt === 'single');
-  document.getElementById('opt-pro-upsell').classList.toggle('selected', opt === 'pro');
-  const labels = { free: 'Download free (watermarked) →', single: 'Pay $4 & download →', pro: 'Start Pro — $9/month →' };
-  document.getElementById('pay-btn-label').textContent = labels[opt];
-}
-
-function handlePayment() {
-  if (selectedOption === 'pro') { closeModals(); showProModal(); return; }
-  if (selectedOption === 'free') { closeModals(); downloadPDF(true); return; }
-  closeModals();
-  downloadPDF(false);
-}
-
-function handleProPayment() {
-  closeModals();
-  window.open('https://quickscope.lemonsqueezy.com/checkout/buy/59430927-f88c-4e69-abdb-f4138702491f?discount=0', '_blank');
-}
-
-function enableProFeatures() {
-  if (proModeActive) return;
-  proModeActive = true;
-  window.qsProAccess = true;
-  localStorage.setItem('qs_pro_access', 'true');
-  document.body?.classList.add('qs-pro-active');
-  const note = document.querySelector('.dl-free-note');
-  if (note) note.textContent = 'Pro unlocked · unlimited clean PDFs';
-  const payLabel = document.getElementById('pay-btn-label');
-  if (payLabel) payLabel.textContent = 'Pro unlocked — unlimited downloads';
-  const optPro = document.getElementById('opt-pro-upsell');
-  if (optPro) optPro.classList.add('selected');
-  selectedOption = 'pro';
-}
-
-// PDF GENERATION
-function downloadPDF(watermarked = false) {
-  const d = getData();
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
-  const W = 210; const H = 297;
-  const ML = 20; const MR = 20; const CW = W - ML - MR;
-  const today = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
-  const ref = 'QS-' + Math.floor(100000 + Math.random()*900000);
-  const providerName = d.yourBusiness ? `${d.yourName} (${d.yourBusiness})` : d.yourName;
-  const totalStr = d.currency + parseFloat(d.price).toLocaleString();
-  let y = 0;
-
-  doc.setFillColor(20,20,19);
-  doc.rect(0, 0, W, 18, 'F');
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(11);
-  doc.setTextColor(255,255,255);
-  doc.text('QUICKSCOPE', ML, 11);
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(7.5);
-  doc.setTextColor(180,175,170);
-  doc.text('Scope of Work Generator', ML + 38, 11);
-  doc.text(`REF: ${ref}`, W - MR, 11, {align:'right'});
-  y = 30;
-
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(22);
-  doc.setTextColor(20,20,19);
-  doc.text('SCOPE OF WORK', ML, y);
-  y += 6;
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(8);
-  doc.setTextColor(140,135,130);
-  doc.text('PROJECT AGREEMENT & DELIVERABLES', ML, y);
-  y += 4;
-  doc.setDrawColor(200,195,188);
-  doc.setLineWidth(0.3);
-  doc.line(ML, y, W - MR, y);
-  y += 8;
-  doc.setFontSize(8);
-  doc.setTextColor(140,135,130);
-  doc.text(`DATE: ${today}`, ML, y);
-  doc.text(`DOCUMENT REF: ${ref}`, W - MR, y, {align:'right'});
-  y += 10;
-
-  doc.setFillColor(240,236,227);
-  doc.rect(ML, y, CW, 7, 'F');
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(7.5);
-  doc.setTextColor(80,75,70);
-  doc.text('PARTIES TO THIS AGREEMENT', ML + 3, y + 4.5);
-  y += 11;
-
-  const halfW = (CW - 6) / 2;
-  doc.setDrawColor(210,205,198);
-  doc.setLineWidth(0.3);
-  doc.rect(ML, y, halfW, 28, 'S');
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(7);
-  doc.setTextColor(180,80,42);
-  doc.text('SERVICE PROVIDER', ML + 3, y + 5);
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(9.5);
-  doc.setTextColor(20,20,19);
-  doc.text(doc.splitTextToSize(providerName, halfW - 6), ML + 3, y + 11);
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(7.5);
-  doc.setTextColor(100,95,90);
-  doc.text(d.yourEmail, ML + 3, y + 21);
-  doc.rect(ML + halfW + 6, y, halfW, 28, 'S');
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(7);
-  doc.setTextColor(180,80,42);
-  doc.text('CLIENT', ML + halfW + 9, y + 5);
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(9.5);
-  doc.setTextColor(20,20,19);
-  doc.text(doc.splitTextToSize(d.clientName, halfW - 6), ML + halfW + 9, y + 11);
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(7.5);
-  doc.setTextColor(100,95,90);
-  doc.text(d.clientEmail, ML + halfW + 9, y + 21);
-  y += 34;
-
-  doc.setFillColor(240,236,227);
-  doc.rect(ML, y, CW, 7, 'F');
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(7.5);
-  doc.setTextColor(80,75,70);
-  doc.text('1. SCOPE OF DELIVERABLES', ML + 3, y + 4.5);
-  y += 11;
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(9);
-  doc.setTextColor(30,30,28);
-  const delivLines = doc.splitTextToSize(d.deliverables, CW);
-  doc.text(delivLines, ML, y);
-  y += delivLines.length * 5 + 8;
-
-  doc.setFillColor(240,236,227);
-  doc.rect(ML, y, CW, 7, 'F');
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(7.5);
-  doc.setTextColor(80,75,70);
-  doc.text('2. PROJECT TERMS', ML + 3, y + 4.5);
-  y += 11;
-  const thirdW = (CW - 8) / 3;
-  [{ label:'PROJECT DEADLINE', value: formatDeadline(d.deadline) },{ label:'REVISIONS INCLUDED', value: d.revisions },{ label:'ADDITIONAL REVISIONS', value: d.extraRevision || 'N/A' }].forEach((t, i) => {
-    const bx = ML + i * (thirdW + 4);
-    doc.setDrawColor(210,205,198);
-    doc.setLineWidth(0.3);
-    doc.rect(bx, y, thirdW, 20, 'S');
-    doc.setFont('helvetica','bold');
-    doc.setFontSize(6.5);
-    doc.setTextColor(140,135,130);
-    doc.text(t.label, bx + 3, y + 5);
-    doc.setFont('helvetica','bold');
-    doc.setFontSize(9);
-    doc.setTextColor(20,20,19);
-    doc.text(doc.splitTextToSize(t.value, thirdW - 6), bx + 3, y + 12);
-  });
-  y += 26;
-
-  doc.setFillColor(240,236,227);
-  doc.rect(ML, y, CW, 7, 'F');
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(7.5);
-  doc.setTextColor(80,75,70);
-  doc.text('3. PAYMENT', ML + 3, y + 4.5);
-  y += 11;
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(8.5);
-  doc.setTextColor(30,30,28);
-  doc.text('Payment Terms:', ML, y);
-  doc.setFont('helvetica','bold');
-  doc.text(d.paymentTerms, ML + 35, y);
-  y += 10;
-  doc.setFillColor(20,20,19);
-  doc.rect(ML, y, CW, 14, 'F');
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(7.5);
-  doc.setTextColor(160,155,148);
-  doc.text('TOTAL PROJECT VALUE', ML + 4, y + 5.5);
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(14);
-  doc.setTextColor(255,255,255);
-  doc.text(totalStr, ML + 4, y + 11.5);
-  y += 22;
-
-  doc.setFillColor(240,236,227);
-  doc.rect(ML, y, CW, 7, 'F');
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(7.5);
-  doc.setTextColor(80,75,70);
-  doc.text('4. TERMS & CONDITIONS', ML + 3, y + 4.5);
-  y += 11;
-  const tcs = [
-    '4.1  The Service Provider agrees to deliver the scope outlined in Section 1 by the deadline stated in Section 2.',
-    '4.2  The Client agrees to provide all necessary materials, feedback, and approvals in a timely manner.',
-    '4.3  Revision rounds are as stated. Additional revisions beyond the agreed number will incur additional charges.',
-    '4.4  Payment is due as per the terms in Section 3. Work will not commence until the upfront payment is received.',
-    '4.5  Any changes to the scope after signing require a new written agreement.',
-    '4.6  Intellectual property transfers to the Client upon receipt of final payment in full.',
-  ];
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(7.8);
-  doc.setTextColor(70,68,65);
-  tcs.forEach(tc => {
-    const lines = doc.splitTextToSize(tc, CW);
-    doc.text(lines, ML, y);
-    y += lines.length * 4.5 + 2;
-  });
-  y += 4;
-
-  if (y > H - 55) { doc.addPage(); y = 20; }
-  doc.setFillColor(240,236,227);
-  doc.rect(ML, y, CW, 7, 'F');
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(7.5);
-  doc.setTextColor(80,75,70);
-  doc.text('5. SIGNATURES', ML + 3, y + 4.5);
-  y += 11;
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(8);
-  doc.setTextColor(80,75,70);
-  doc.text('By signing below, both parties agree to the terms and conditions of this Scope of Work.', ML, y);
-  y += 12;
-  const sigW = (CW - 10) / 2;
-  doc.setDrawColor(80,75,70);
-  doc.setLineWidth(0.5);
-  doc.line(ML, y + 14, ML + sigW, y + 14);
-  doc.line(ML + sigW + 10, y + 14, ML + sigW + 10 + sigW, y + 14);
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(8.5);
-  doc.setTextColor(20,20,19);
-  doc.text(providerName, ML, y + 19);
-  doc.text(d.clientName, ML + sigW + 10, y + 19);
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(7.5);
-  doc.setTextColor(140,135,130);
-  doc.text('Service Provider', ML, y + 24);
-  doc.text('Client', ML + sigW + 10, y + 24);
-  doc.text('Date: ____________________', ML, y + 30);
-  doc.text('Date: ____________________', ML + sigW + 10, y + 30);
-
-  doc.setFillColor(20,20,19);
-  doc.rect(0, H - 12, W, 12, 'F');
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(6.5);
-  doc.setTextColor(120,115,108);
-  doc.text('Generated by QuickScope · quickscope.vercel.app · This document is legally binding upon signature by both parties.', W/2, H - 5, {align:'center'});
-
-  // Watermark stamp for free tier — every page
-  if (watermarked) {
-    const totalPages = doc.internal.getNumberOfPages();
-    for (let p = 1; p <= totalPages; p++) {
-      doc.setPage(p);
-      doc.saveGraphicsState();
-      doc.setFont('helvetica','bold');
-      doc.setFontSize(48);
-      doc.setTextColor(200,80,42);
-      doc.setGState(new doc.GState({opacity: 0.07}));
-      for (let wy = 50; wy < H; wy += 65) {
-        doc.text('QUICKSCOPE FREE', W/2, wy, {align:'center', angle:35});
+  if (typeof paypal !== 'undefined') {
+    paypal.Buttons({
+      style: { shape: 'pill', color: 'gold', layout: 'vertical', label: 'subscribe' },
+      createSubscription: function(data, actions) {
+        return actions.subscription.create({ plan_id: 'P-7EC30041BD813483SNHEYCNQ' });
+      },
+      onApprove: function(data, actions) {
+        window.location.href = 'https://quickscopestudio.vercel.app?paid_pro=true';
       }
-      doc.restoreGraphicsState();
-    }
+    }).render('#paypal-button-container-P-7EC30041BD813483SNHEYCNQ');
   }
-
-  doc.save(`QuickScope_${d.yourName.replace(/\s+/g,'_')}_${d.clientName.replace(/\s+/g,'_')}${watermarked?'_free':''}.pdf`);
-}
-
-document.getElementById('deadline').min = new Date().toISOString().split('T')[0];
-
-// Auto-trigger PDF download if returning from successful payment
-(function() {
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('paid') === 'true') {
-    const saved = localStorage.getItem('qs_pending_download');
-    if (saved) {
-      const d = JSON.parse(saved);
-      document.getElementById('your-name').value = d.yourName || '';
-      document.getElementById('your-email').value = d.yourEmail || '';
-      document.getElementById('your-business').value = d.yourBusiness || '';
-      document.getElementById('client-name').value = d.clientName || '';
-      document.getElementById('client-email').value = d.clientEmail || '';
-      document.getElementById('deliverables').value = d.deliverables || '';
-      document.getElementById('deadline').value = d.deadline || '';
-      document.getElementById('revisions').value = d.revisions || '';
-      document.getElementById('extra-revision').value = d.extraRevision || '';
-      document.getElementById('price').value = d.price || '';
-      document.getElementById('currency').value = d.currency || '$';
-      document.getElementById('payment-terms').value = d.paymentTerms || '';
-      liveUpdate();
-      localStorage.removeItem('qs_pending_download');
-      setTimeout(() => downloadPDF(false), 800);
-      history.replaceState({}, '', window.location.pathname);
-    }
-  }
-})();
-
-// AUTH
-const API = (() => {
-  const origin = window.location.origin;
-  if (origin && origin !== 'null') {
-    return origin;
-  }
-  return 'http://localhost:3000';
-})();
-let authMode = 'login';
-let currentUser = null;
-let currentToken = null;
-
-(function() {
-  const token = localStorage.getItem('qs_token');
-  const user = localStorage.getItem('qs_user');
-  if (token && user) {
-    currentToken = token;
-    currentUser = JSON.parse(user);
-    updateNavForUser();
-  }
-})();
-
-function updateNavForUser() {
-  const btn = document.getElementById('nav-auth-btn');
-  if (currentUser) {
-    btn.textContent = 'Dashboard';
-    btn.classList.add('logged-in');
-    btn.onclick = showDashboard;
-  } else {
-    btn.textContent = 'Log in';
-    btn.classList.remove('logged-in');
-    btn.onclick = showAuthModal;
-  }
-}
-
-function showAuthModal() {
-  authMode = 'login';
-  document.getElementById('auth-modal-title').textContent = 'Welcome back';
-  document.getElementById('auth-modal-desc').textContent = 'Log in to access your document history and Pro features.';
-  document.getElementById('auth-submit-btn').textContent = 'Log in';
-  document.getElementById('auth-toggle-text').textContent = "Don't have an account?";
-  document.getElementById('auth-toggle-btn').textContent = 'Sign up';
-  document.getElementById('auth-error').style.display = 'none';
-  document.getElementById('overlay-auth').classList.add('open');
-}
-
-function closeAuthModal() {
-  document.getElementById('overlay-auth').classList.remove('open');
-}
-
-function toggleAuthMode() {
-  authMode = authMode === 'login' ? 'signup' : 'login';
-  if (authMode === 'signup') {
-    document.getElementById('auth-modal-title').textContent = 'Create account';
-    document.getElementById('auth-modal-desc').textContent = 'Free to sign up. Upgrade to Pro any time.';
-    document.getElementById('auth-submit-btn').textContent = 'Create account';
-    document.getElementById('auth-toggle-text').textContent = 'Already have an account?';
-    document.getElementById('auth-toggle-btn').textContent = 'Log in';
-  } else {
-    document.getElementById('auth-modal-title').textContent = 'Welcome back';
-    document.getElementById('auth-modal-desc').textContent = 'Log in to access your document history and Pro features.';
-    document.getElementById('auth-submit-btn').textContent = 'Log in';
-    document.getElementById('auth-toggle-text').textContent = "Don't have an account?";
-    document.getElementById('auth-toggle-btn').textContent = 'Sign up';
-  }
-  document.getElementById('auth-error').style.display = 'none';
-}
-
-async function handleAuth() {
-  const email = document.getElementById('auth-email').value.trim();
-  const password = document.getElementById('auth-password').value.trim();
-  const errEl = document.getElementById('auth-error');
-  const btn = document.getElementById('auth-submit-btn');
-  if (!email || !password) {
-    errEl.textContent = 'Email and password required';
-    errEl.style.display = 'block';
-    return;
-  }
-  btn.textContent = 'Please wait...';
-  btn.disabled = true;
-  const endpoint = authMode === 'login' ? '/auth/login' : '/auth/signup';
-  try {
-    const res = await fetch(API + endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
-    });
-    const data = await res.json();
-    if (data.error) {
-      errEl.textContent = data.error;
-      errEl.style.color = 'var(--accent)';
-      errEl.style.display = 'block';
-      btn.textContent = authMode === 'login' ? 'Log in' : 'Create account';
-      btn.disabled = false;
-      return;
-    }
-    if (authMode === 'signup') {
-      errEl.style.color = 'var(--green)';
-      errEl.textContent = 'Account created! Check your email to confirm, then log in.';
-      errEl.style.display = 'block';
-      btn.textContent = 'Create account';
-      btn.disabled = false;
-      return;
-    }
-    currentToken = data.token;
-    currentUser = data.user;
-    localStorage.setItem('qs_token', currentToken);
-    localStorage.setItem('qs_user', JSON.stringify(currentUser));
-    closeAuthModal();
-    updateNavForUser();
-  } catch(e) {
-    errEl.textContent = 'Server error. Make sure the server is running.';
-    errEl.style.display = 'block';
-    btn.textContent = authMode === 'login' ? 'Log in' : 'Create account';
-    btn.disabled = false;
-  }
-}
-
-function handleLogout() {
-  currentToken = null;
-  currentUser = null;
-  localStorage.removeItem('qs_token');
-  localStorage.removeItem('qs_user');
-  closeDashboard();
-  updateNavForUser();
-}
-
-async function showDashboard() {
-  document.getElementById('dashboard-user-email').textContent = currentUser.email;
-  document.getElementById('overlay-dashboard').classList.add('open');
-  loadDocuments();
-}
-
-function closeDashboard() {
-  document.getElementById('overlay-dashboard').classList.remove('open');
-}
-
-async function loadDocuments() {
-  const container = document.getElementById('dashboard-content');
-  try {
-    const res = await fetch(API + '/documents', {
-      headers: { 'Authorization': 'Bearer ' + currentToken }
-    });
-    const data = await res.json();
-    if (!data.documents || data.documents.length === 0) {
-      container.innerHTML = '<p style="font-size:0.85rem;color:var(--ink3);text-align:center;padding:2rem 0">No documents yet. Generate your first scope below.</p>';
-      return;
-    }
-    container.innerHTML = data.documents.map(d => `
-      <div style="border:1px solid var(--border);border-radius:8px;padding:0.85rem 1rem;margin-bottom:0.65rem;display:flex;justify-content:space-between;align-items:center">
-        <div>
-          <div style="font-size:0.88rem;font-weight:500;color:var(--ink)">${d.client_name}</div>
-          <div style="font-family:var(--mono);font-size:0.6rem;color:var(--ink3);margin-top:2px">${(d.deliverables||'').substring(0,40)}... · ${d.currency}${parseFloat(d.price).toLocaleString()}</div>
-        </div>
-        <button onclick="deleteDocument('${d.id}')" style="background:none;border:none;color:var(--ink3);cursor:pointer;font-size:0.75rem;font-family:var(--mono)">Delete</button>
-      </div>
-    `).join('');
-  } catch(e) {
-    container.innerHTML = '<p style="font-size:0.85rem;color:var(--accent);text-align:center;padding:2rem 0">Could not load documents.</p>';
-  }
-}
-
-async function deleteDocument(id) {
-  await fetch(API + '/documents/' + id, {
-    method: 'DELETE',
-    headers: { 'Authorization': 'Bearer ' + currentToken }
-  });
-  loadDocuments();
-}
-
-function exportCSV() {
-  if (!currentToken) return;
-  window.open(API + '/documents/export/csv', '_blank');
-}
-
 </script>
-<script>
-  // Trigger PDF download if redirected from PayPal
-  window.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('paid') === 'true') {
-      if (typeof downloadPDF === 'function') {
-        downloadPDF();
-      } else {
-        console.warn('downloadPDF function not found');
-      }
-    }
-    if (urlParams.get('paid_pro') === 'true') {
-      enableProFeatures();
-    }
-  });
-</script>
+
 </body>
 </html>
