@@ -148,6 +148,22 @@ function dismissDraft() {
   document.getElementById('restore-banner').style.display = 'none';
 }
 
+function getShareURL() {
+  const d = getData();
+  const encoded = btoa(JSON.stringify(d));
+  return window.location.origin + window.location.pathname + '?preview=' + encoded;
+}
+
+function sharePreview() {
+  if (!validateFields()) return;
+  const url = getShareURL();
+  navigator.clipboard.writeText(url).then(() => {
+    showToast('Preview link copied to clipboard ✓');
+  }).catch(() => {
+    prompt('Copy this link:', url);
+  });
+}
+
 function validateAndDownloadFree() {
   if (!validateFields()) {
     document.querySelector('.form-stack').scrollIntoView({behavior:'smooth',block:'start'});
@@ -747,6 +763,27 @@ window.addEventListener('DOMContentLoaded', () => {
         document.getElementById('restore-banner').style.display = 'flex';
       }
     } catch(e) { localStorage.removeItem('qs_draft'); }
+  }
+  const previewParam = urlParams.get('preview');
+  if (previewParam) {
+    try {
+      const d = JSON.parse(atob(previewParam));
+      document.getElementById('your-name').value = d.yourName || '';
+      document.getElementById('your-email').value = d.yourEmail || '';
+      document.getElementById('your-business').value = d.yourBusiness || '';
+      document.getElementById('client-name').value = d.clientName || '';
+      document.getElementById('client-email').value = d.clientEmail || '';
+      document.getElementById('deliverables').value = d.deliverables || '';
+      document.getElementById('deadline').value = d.deadline || '';
+      document.getElementById('revisions').value = d.revisions || '';
+      document.getElementById('extra-revision').value = d.extraRevision || '';
+      document.getElementById('price').value = d.price || '';
+      document.getElementById('currency').value = d.currency || '$';
+      document.getElementById('payment-terms').value = d.paymentTerms || '';
+      liveUpdate();
+      // Scroll to the tool section
+      setTimeout(() => document.getElementById('tool').scrollIntoView({behavior:'smooth'}), 400);
+    } catch(e) { console.error('Invalid preview link'); }
   }
 });
 async function deleteDocument(id) {
