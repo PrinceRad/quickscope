@@ -171,6 +171,15 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);box-shadow:0 0 0
 input.error,select.error,textarea.error{border-color:var(--accent);box-shadow:0 0 0 3px rgba(200,80,42,0.08);}
 .field-error{font-family:var(--mono);font-size:0.58rem;color:var(--accent);display:none;margin-top:1px}
 .field-error.show{display:block}
+.char-count {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  color: var(--ink3);
+  text-align: right;
+  margin-top: 2px;
+}
+.char-count.warning { color: var(--gold); }
+.char-count.over { color: var(--accent); }
 textarea{resize:vertical;min-height:76px;line-height:1.55}
 select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239c9790' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.8rem center;padding-right:2.2rem;}
 

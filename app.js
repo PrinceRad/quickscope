@@ -60,6 +60,12 @@ function liveUpdate() {
   document.getElementById('p-ref').textContent = 'REF: QS-' + Math.floor(100000 + Math.random()*900000);
   if (d.yourName) document.getElementById('p-sig1').textContent = d.yourName + ' signature';
   if (d.clientName) document.getElementById('p-sig2').textContent = d.clientName + ' signature';
+  const delivCount = document.getElementById('deliverables-count');
+  if (delivCount) {
+    const len = d.deliverables.length;
+    delivCount.textContent = `${len} / 500`;
+    delivCount.className = 'char-count' + (len > 500 ? ' over' : len > 400 ? ' warning' : '');
+  }
 }
 
 function showErr(id, msg) {
