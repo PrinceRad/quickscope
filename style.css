@@ -31,6 +31,28 @@ nav{position:fixed;top:0;left:0;right:0;height:60px;z-index:100;display:flex;ali
 .nav-auth-btn:hover{background:var(--ink);color:var(--white);border-color:var(--ink)}
 .nav-auth-btn.logged-in{color:var(--green);border-color:#bbf7d0;background:var(--green-soft);}
 
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: var(--ink);
+  color: var(--white);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  z-index: 500;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* HERO */
 .hero{padding:100px 2.5rem 0;max-width:1200px;margin:0 auto;}
 .hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;padding-bottom:5rem;border-bottom:1px solid var(--border);}

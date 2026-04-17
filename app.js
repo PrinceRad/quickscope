@@ -93,6 +93,13 @@ function validateFields() {
   return ok;
 }
 
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
 function validateAndDownloadFree() {
   if (!validateFields()) {
     document.querySelector('.form-stack').scrollIntoView({behavior:'smooth',block:'start'});
@@ -434,6 +441,7 @@ function downloadPDF(watermarked = false) {
   }
 
   doc.save(`QuickScope_${d.yourName.replace(/\s+/g,'_')}_${d.clientName.replace(/\s+/g,'_')}${watermarked?'_free':''}.pdf`);
+  showToast(watermarked ? 'Free PDF downloaded ✓' : 'Clean PDF downloaded ✓');
 }
 
 document.getElementById('deadline').min = new Date().toISOString().split('T')[0];
