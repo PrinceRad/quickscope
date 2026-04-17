@@ -26,6 +26,7 @@ function getData() {
     yourName: document.getElementById('your-name').value.trim(),
     yourEmail: document.getElementById('your-email').value.trim(),
     yourBusiness: document.getElementById('your-business').value.trim(),
+    docTitle: document.getElementById('doc-title').value.trim() || 'Scope of Work',
     clientName: document.getElementById('client-name').value.trim(),
     clientEmail: document.getElementById('client-email').value.trim(),
     deliverables: document.getElementById('deliverables').value.trim(),
@@ -49,6 +50,7 @@ function liveUpdate() {
   const dn = d.yourBusiness ? `${d.yourName} (${d.yourBusiness})` : d.yourName;
   document.getElementById('p-your-name').textContent = dn || '—';
   document.getElementById('p-your-email').textContent = d.yourEmail || '—';
+  document.getElementById('p-doc-title').textContent = d.docTitle;
   document.getElementById('p-client-name').textContent = d.clientName || '—';
   document.getElementById('p-client-email').textContent = d.clientEmail || '—';
   document.getElementById('p-deliverables').textContent = d.deliverables || '—';
@@ -304,7 +306,7 @@ function downloadPDF(watermarked = false) {
   doc.setFont('helvetica','bold');
   doc.setFontSize(22);
   doc.setTextColor(20,20,19);
-  doc.text('SCOPE OF WORK', ML, y);
+  doc.text(d.docTitle.toUpperCase(), ML, y);
   y += 6;
   doc.setFont('helvetica','normal');
   doc.setFontSize(8);
