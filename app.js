@@ -166,6 +166,16 @@ function sharePreview() {
   });
 }
 
+function emailClient() {
+  const d = getData();
+  if (!d.clientEmail) { showToast('Add your client email first'); return; }
+  const subject = encodeURIComponent(`Scope of Work — ${d.deliverables.substring(0, 40)}`);
+  const body = encodeURIComponent(
+    `Hi ${d.clientName},\n\nPlease find attached the scope of work document for our project.\n\nPlease review, sign, and return a copy at your earliest convenience.\n\nBest regards,\n${d.yourName}`
+  );
+  window.location.href = `mailto:${d.clientEmail}?subject=${subject}&body=${body}`;
+}
+
 function validateAndDownloadFree() {
   if (!validateFields()) {
     document.querySelector('.form-stack').scrollIntoView({behavior:'smooth',block:'start'});
