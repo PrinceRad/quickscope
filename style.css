@@ -276,3 +276,14 @@ footer a:hover{color:rgba(255,255,255,0.7)}
   .preview-sticky{position:relative;top:auto}
   .field-row{grid-template-columns:1fr}
 }
+
+@media print {
+  nav, .hero, .proof-bar, .section, .pricing-section,
+  .workspace-section, .tool-section .form-stack,
+  .dl-btns, .preview-label, footer, .overlay { display: none !important; }
+  .tool-body { display: block !important; padding: 0 !important; }
+  .preview-sticky { position: static !important; }
+  .preview-doc { box-shadow: none !important; border: none !important; }
+  .watermark { display: none !important; }
+  body { background: white !important; }
+}
