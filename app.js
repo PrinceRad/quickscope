@@ -66,6 +66,13 @@ function liveUpdate() {
     delivCount.textContent = `${len} / 500`;
     delivCount.className = 'char-count' + (len > 500 ? ' over' : len > 400 ? ' warning' : '');
   }
+  // Auto-save draft (skip if we just restored from payment)
+  if (!sessionStorage.getItem('qs_skip_autosave')) {
+    const draft = getData();
+    if (draft.yourName || draft.clientName || draft.deliverables) {
+      localStorage.setItem('qs_draft', JSON.stringify(draft));
+    }
+  }
 }
 
 function showErr(id, msg) {
@@ -113,6 +120,32 @@ function copyRef() {
     btn.textContent = '✓';
     setTimeout(() => { btn.textContent = '⎘'; }, 1500);
   });
+}
+
+function restoreDraft() {
+  const saved = localStorage.getItem('qs_draft');
+  if (!saved) return;
+  const d = JSON.parse(saved);
+  document.getElementById('your-name').value = d.yourName || '';
+  document.getElementById('your-email').value = d.yourEmail || '';
+  document.getElementById('your-business').value = d.yourBusiness || '';
+  document.getElementById('client-name').value = d.clientName || '';
+  document.getElementById('client-email').value = d.clientEmail || '';
+  document.getElementById('deliverables').value = d.deliverables || '';
+  document.getElementById('deadline').value = d.deadline || '';
+  document.getElementById('revisions').value = d.revisions || '';
+  document.getElementById('extra-revision').value = d.extraRevision || '';
+  document.getElementById('price').value = d.price || '';
+  document.getElementById('currency').value = d.currency || '$';
+  document.getElementById('payment-terms').value = d.paymentTerms || '';
+  liveUpdate();
+  document.getElementById('restore-banner').style.display = 'none';
+  localStorage.removeItem('qs_draft');
+}
+
+function dismissDraft() {
+  localStorage.removeItem('qs_draft');
+  document.getElementById('restore-banner').style.display = 'none';
 }
 
 function validateAndDownloadFree() {
@@ -697,12 +730,23 @@ window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => downloadPDF(false), 800);
     }
     history.replaceState({}, '', window.location.pathname);
+    sessionStorage.setItem('qs_skip_autosave', 'true');
   }
 
   // Handle return from $9 Pro PayPal subscription
   if (urlParams.get('paid_pro') === 'true') {
     enableProFeatures();
     history.replaceState({}, '', window.location.pathname);
+  }
+  // Check for existing draft
+  const draft = localStorage.getItem('qs_draft');
+  if (draft) {
+    try {
+      const d = JSON.parse(draft);
+      if (d.yourName || d.clientName) {
+        document.getElementById('restore-banner').style.display = 'flex';
+      }
+    } catch(e) { localStorage.removeItem('qs_draft'); }
   }
 });
 async function deleteDocument(id) {

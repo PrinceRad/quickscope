@@ -236,6 +236,11 @@
   </div>
   <div class="tool-body">
     <div class="form-stack">
+      <div class="restore-banner" id="restore-banner" style="display:none">
+        <span>You have an unsaved draft. Restore it?</span>
+        <button onclick="restoreDraft()">Restore</button>
+        <button onclick="dismissDraft()">Dismiss</button>
+      </div>
       <div class="form-block">
         <div class="form-block-header"><div class="fb-num">1</div><div class="fb-title">Your details</div></div>
         <div class="form-block-body">

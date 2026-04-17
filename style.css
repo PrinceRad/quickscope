@@ -180,6 +180,34 @@ input.error,select.error,textarea.error{border-color:var(--accent);box-shadow:0 
 }
 .char-count.warning { color: var(--gold); }
 .char-count.over { color: var(--accent); }
+
+.restore-banner {
+  background: var(--gold-soft);
+  border: 1px solid #fcd34d;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.82rem;
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.restore-banner button {
+  background: var(--gold);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  font-family: var(--sans);
+}
+.restore-banner button:last-child {
+  background: transparent;
+  color: var(--gold);
+  border: 1px solid #fcd34d;
+}
 textarea{resize:vertical;min-height:76px;line-height:1.55}
 select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239c9790' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.8rem center;padding-right:2.2rem;}
 
