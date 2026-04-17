@@ -712,6 +712,25 @@ function enableProFeatures() {
 window.addEventListener('DOMContentLoaded', () => {
   const urlParams = new URLSearchParams(window.location.search);
 
+  // Auto-detect currency from browser locale
+  (function() {
+    const localeMap = {
+      'en-NG': '₦', 'en-ZA': 'R', 'en-GH': 'GH₵', 'en-KE': 'KSh',
+      'en-GB': '£', 'en-AU': 'A$', 'en-CA': 'CA$',
+      'de': '€', 'fr': '€', 'es': '€', 'it': '€', 'pt-PT': '€'
+    };
+    const lang = navigator.language || navigator.userLanguage;
+    const currency = localeMap[lang] || localeMap[lang.split('-')[0]];
+    if (currency) {
+      const sel = document.getElementById('currency');
+      if (sel) {
+        for (let opt of sel.options) {
+          if (opt.value === currency) { sel.value = currency; break; }
+        }
+      }
+    }
+  })();
+
   // Restore pro session if user had it active before
   if (localStorage.getItem('qs_pro_access') === 'true') {
     enableProFeatures();
