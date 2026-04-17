@@ -717,7 +717,8 @@ window.addEventListener('DOMContentLoaded', () => {
     const localeMap = {
       'en-NG': '₦', 'en-ZA': 'R', 'en-GH': 'GH₵', 'en-KE': 'KSh',
       'en-GB': '£', 'en-AU': 'A$', 'en-CA': 'CA$',
-      'de': '€', 'fr': '€', 'es': '€', 'it': '€', 'pt-PT': '€'
+      'de': '€', 'fr': '€', 'es': '€', 'it': '€', 'pt-PT': '€',
+      'en-BW': 'P'
     };
     const lang = navigator.language || navigator.userLanguage;
     const currency = localeMap[lang] || localeMap[lang.split('-')[0]];
