@@ -106,6 +106,15 @@ function showToast(message) {
   setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
+function copyRef() {
+  const ref = document.getElementById('p-ref').textContent;
+  navigator.clipboard.writeText(ref).then(() => {
+    const btn = document.getElementById('copy-ref-btn');
+    btn.textContent = '✓';
+    setTimeout(() => { btn.textContent = '⎘'; }, 1500);
+  });
+}
+
 function validateAndDownloadFree() {
   if (!validateFields()) {
     document.querySelector('.form-stack').scrollIntoView({behavior:'smooth',block:'start'});

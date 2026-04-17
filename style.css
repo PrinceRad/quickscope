@@ -193,6 +193,17 @@ select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%
 .doc-brand{font-family:var(--serif);font-size:1rem;color:var(--ink)}
 .doc-brand span{color:var(--accent)}
 .doc-ref{font-family:var(--mono);font-size:0.58rem;color:var(--ink3);letter-spacing:0.05em}
+.copy-ref-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.65rem;
+  color: var(--ink3);
+  padding: 1px 4px;
+  border-radius: 3px;
+  transition: background 0.12s;
+}
+.copy-ref-btn:hover { background: var(--bg2); color: var(--ink); }
 .doc-title{font-family:var(--serif);font-size:1.3rem;color:var(--ink);margin-bottom:2px}
 .doc-subtitle{font-family:var(--mono);font-size:0.58rem;color:var(--ink3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:1.1rem}
 .doc-parties{display:grid;grid-template-columns:1fr 1fr;gap:0.65rem;margin-bottom:1rem}
